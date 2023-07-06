@@ -33,8 +33,11 @@ def convert_timestamp_to_date(timestamp: int) -> str:
     # Calculate the difference in hours
     hours = diff.seconds // 3600
 
+    # Calculate the difference in minutes
+    minutes = (diff.seconds // 60) % 60
+
     # Format the results
-    result = "There are " + str(months) + " months " + str(remaining_days) + " days and " + str(hours) + " hours left until the license expires."
+    result = "There are " + str(months) + " months " + str(remaining_days) + " days " + str(hours) + " hours and " + str(minutes) + " minutes left until the license expires."
     return result
 
 # Get token IDs
@@ -62,20 +65,21 @@ def main():
 
         if choice == '1':
             temp_address = str(input("Enter address: "))
-            try:
-                w3.is_address(temp_address)
-            except InvalidAddress:
-                print("Invalid Ethereum address.\n")
-                continue
-            tokenIds = get_token_ids(temp_address)
-            token_details = get_token_details(tokenIds)
-            if token_details:
-                token_with_longest_time = max(token_details, key=lambda x: x[1])
-                print("------------------------------------")
-                print(f"The ID of the License that has the most remaining time is {token_with_longest_time[0]} \n{token_with_longest_time[1]}")
-                print("------------------------------------")
+
+            # Check if the address is valid
+            if w3.is_address(temp_address) == True:
+                tokenIds = get_token_ids(temp_address)
+                token_details = get_token_details(tokenIds)
+                if token_details:
+                    token_with_longest_time = max(token_details, key=lambda x: x[1])
+                    print("------------------------------------")
+                    print(f"The ID of the License that has the most remaining time is {token_with_longest_time[0]} \n{token_with_longest_time[1]}")
+                    print("------------------------------------")
+                else:
+                    print("No tokens found.\n")
             else:
-                print("No tokens found.\n")
+                print("\nINVALID ETHEREUM ADDRESS. TRY ANOTHER ADDRESS\n")
+            
         elif choice == '2':
             print("Exiting...")
             break
@@ -83,5 +87,8 @@ def main():
             print("------------------------------------")
             print("Invalid choice. Please enter 1, 2 or 3.\n")
 
+
+
 if __name__ == "__main__":
     main()
+
