@@ -26,17 +26,10 @@ def convert_timestamp_to_date(timestamp: int) -> str:
     # Calculate the difference in days
     days = diff.days
 
-    # Calculate the difference in months and calculate remaining days
-    months = days // 30
-    remaining_days = days % 30
+    # Calculate the difference in months, days, hours and minutes
+    months, remaining_days, hours, minutes = days // 30, days % 30, diff.seconds // 3600, (diff.seconds // 60) % 60
 
-    # Calculate the difference in hours
-    hours = diff.seconds // 3600
-
-    # Calculate the difference in minutes
-    minutes = (diff.seconds // 60) % 60
-
-    # Format the results
+    # Format the results and return
     result = "There are " + str(months) + " months " + str(remaining_days) + " days " + str(hours) + " hours and " + str(minutes) + " minutes left until the license expires."
     return result
 
@@ -85,7 +78,7 @@ def main():
             break
         else:
             print("------------------------------------")
-            print("Invalid choice. Please enter 1, 2 or 3.\n")
+            print("Invalid choice. Please enter 1 or 2.\n")
 
 
 
